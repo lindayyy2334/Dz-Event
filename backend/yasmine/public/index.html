@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de devis</title>
+</head>
+<body>
+
+    <h1>Demander un devis</h1>
+    
+    <form id="devisForm">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="description">Description du projet:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+        
+        <label for="services">Services demandés:</label>
+        <input type="text" id="services" name="services" required><br><br>
+        
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <script>
+        document.getElementById("devisForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Empêcher l'envoi traditionnel du formulaire
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch("/demande-devis", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                alert(data.message); // Afficher un message de confirmation
+            })
+            .catch((error) => {
+                console.error("Erreur:", error);
+                alert("Une erreur est survenue.");
+            });
+        });
+    </script>
+    
+</body>
+</html>
